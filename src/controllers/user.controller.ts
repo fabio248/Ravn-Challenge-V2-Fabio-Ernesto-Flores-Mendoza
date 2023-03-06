@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { UserService } from "../services/users.service";
+import { NextFunction, Request, Response } from 'express';
+import { UserService } from '../services/users.service';
 
 const userService = new UserService();
 
@@ -10,7 +10,7 @@ export const listUsers = async (
 ) => {
   try {
     const users = await userService.findAll();
-    res.json({ statusCode: "200", message: "users founds", users });
+    res.json({ statusCode: '200', message: 'users founds', users });
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,7 @@ export const getUser = async (
   try {
     const { id } = req.params;
     const user = await userService.findOne(parseInt(id));
-    res.json({ statusCode: "200", message: "user found", user });
+    res.json({ statusCode: '200', message: 'user found', user });
   } catch (error) {
     next(error);
   }
@@ -39,7 +39,7 @@ export const createUser = async (
     const data = req.body;
     console.log(req.body);
     const user = await userService.create(data);
-    res.status(201).json({ statusCode: "201", message: "user created", user });
+    res.status(201).json({ statusCode: '201', message: 'user created', user });
   } catch (error) {
     next(error);
   }
@@ -54,7 +54,7 @@ export const updateUser = async (
     const { id } = req.params;
     const changes = req.body;
     const user = await userService.update(parseInt(id), changes);
-    res.json({ statusCode: "200", message: "user updated", user });
+    res.json({ statusCode: '200', message: 'user updated', user });
   } catch (error) {
     next(error);
   }
@@ -68,7 +68,7 @@ export const deleteUser = async (
   try {
     const { id } = req.params;
     const user = await userService.delete(parseInt(id));
-    res.json({ statusCode: "200", message: "user deleted", user });
+    res.json({ statusCode: '200', message: 'user deleted', user });
   } catch (error) {
     next(error);
   }

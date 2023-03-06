@@ -1,6 +1,6 @@
-import boom from "@hapi/boom";
-import { NextFunction, Request, Response } from "express";
-import Joi from "joi";
+import boom from '@hapi/boom';
+import { NextFunction, Request, Response } from 'express';
+import Joi from 'joi';
 
 export function validatorHandler(schema: Joi.ObjectSchema, property: string) {
   return (req: Request, res: Response, next: NextFunction) => {
