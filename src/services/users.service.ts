@@ -6,18 +6,6 @@ import { dataUser, selectedDataUser } from '../utils/types/user.types';
 class UserService {
   constructor() {}
 
-  //Creates a new user.
-  async create(data: dataUser) {
-    const { name, lastName, email, password, role } = data;
-    const hashPassword = await bcrypt.hash(password, 10);
-
-    data.password = hashPassword;
-    const createUser = await db.user.create({
-      data: { name, lastName, email, password: hashPassword, role },
-      select: selectedDataUser,
-    });
-    return createUser;
-  }
   //Finds all users.
   async findAll() {
     const users = db.user.findMany({

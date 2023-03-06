@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import { UserService } from './users.service';
+import { dataUser, selectedDataUser } from '../utils/types/user.types';
+import { db } from '../utils/db/db.server';
 
 const userService = new UserService();
 class AuthService {
@@ -14,6 +16,18 @@ class AuthService {
     if (!isMatch) throw boom.unauthorized();
     delete user.password;
     return user;
+  }
+  //Creates a new user.
+  async createUser(data: dataUser) {
+    const { name, lastName, email, password, role } = data;
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    data.password = hashPassword;
+    const createUser = await db.user.create({
+      data: { name, lastName, email, password: hashPassword, role },
+      select: selectedDataUser,
+    });
+    return createUser;
   }
   //Creates JWT that contains a payload with the user's id and role.
   signToken(user) {

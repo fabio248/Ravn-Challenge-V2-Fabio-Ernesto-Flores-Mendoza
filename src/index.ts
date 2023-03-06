@@ -3,13 +3,11 @@ import config from './config/config';
 import { routerAPI } from './routes';
 import { boomErrorHandler, ormErrorHandler } from './middlewares/error.handler';
 import './utils/auth/index';
-const app: Application = express();
-app.use(express.json());
-routerAPI(app);
+import { createServer } from './utils/server';
 
-app.use(boomErrorHandler);
-app.use(ormErrorHandler);
-
-app.listen(config.port, () => {
+const app = createServer();
+const server = app.listen(config.port, () => {
   console.log(`Server running on port ${config.port}`);
 });
+
+export { server };
