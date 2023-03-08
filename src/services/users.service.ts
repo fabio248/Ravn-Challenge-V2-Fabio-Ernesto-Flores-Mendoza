@@ -21,7 +21,6 @@ class UserService {
       },
       select: selectedDataUser,
     });
-    console.log(foundUser);
     if (!foundUser) throw boom.notFound('user not found');
     return foundUser;
   }

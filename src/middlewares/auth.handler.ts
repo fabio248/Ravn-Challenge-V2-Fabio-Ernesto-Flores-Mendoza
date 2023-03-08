@@ -6,7 +6,7 @@ import { dataUser } from '../utils/types/user.types';
 export function checkRoles(...roles) {
   return (req: Request, res: Response, next: NextFunction) => {
     const user: dataUser = req.user;
-    if (roles.includes(user.role)) next();
+    if (roles.includes(user.role.toString())) next();
     else next(boom.unauthorized());
   };
 }

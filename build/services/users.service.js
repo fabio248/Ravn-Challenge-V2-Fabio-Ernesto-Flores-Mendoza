@@ -34,44 +34,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import bcrypt from "bcrypt";
-import boom from "@hapi/boom";
-import { db } from "../utils/db/db.server";
-var selectedDataUser = {
-    id: true,
-    name: true,
-    lastName: true,
-    role: true,
-    email: true,
-    createAt: true,
-    updateAt: true,
-};
+import boom from '@hapi/boom';
+import { db } from '../utils/db/db.server';
+import { selectedDataUser } from '../utils/types/user.types';
 var UserService = /** @class */ (function () {
     function UserService() {
     }
-    //Creates a new user.
-    UserService.prototype.create = function (data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var name, lastName, email, password, role, hashPassword, createUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        name = data.name, lastName = data.lastName, email = data.email, password = data.password, role = data.role;
-                        return [4 /*yield*/, bcrypt.hash(password, 10)];
-                    case 1:
-                        hashPassword = _a.sent();
-                        data.password = hashPassword;
-                        return [4 /*yield*/, db.user.create({
-                                data: { name: name, lastName: lastName, email: email, password: hashPassword, role: role },
-                                select: selectedDataUser,
-                            })];
-                    case 2:
-                        createUser = _a.sent();
-                        return [2 /*return*/, createUser];
-                }
-            });
-        });
-    };
     //Finds all users.
     UserService.prototype.findAll = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -98,9 +66,8 @@ var UserService = /** @class */ (function () {
                         })];
                     case 1:
                         foundUser = _a.sent();
-                        console.log(foundUser);
                         if (!foundUser)
-                            throw boom.notFound("user not found");
+                            throw boom.notFound('user not found');
                         return [2 /*return*/, foundUser];
                 }
             });
@@ -134,7 +101,7 @@ var UserService = /** @class */ (function () {
                     case 1:
                         updateUser = _a.sent();
                         if (!updateUser)
-                            throw boom.notFound("user not found");
+                            throw boom.notFound('user not found');
                         return [2 /*return*/, updateUser];
                 }
             });

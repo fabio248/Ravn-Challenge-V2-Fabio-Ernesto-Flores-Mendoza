@@ -8,6 +8,7 @@ function createServer() {
   const app: Application = express();
   //Middleware to handle json
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   //All routes
   routerAPI(app);
   //Middlewares to handle differences errors

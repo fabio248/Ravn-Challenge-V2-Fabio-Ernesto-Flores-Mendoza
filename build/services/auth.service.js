@@ -34,15 +34,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import boom from "@hapi/boom";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import config from "../config/config";
-import { UserService } from "./users.service";
+import boom from '@hapi/boom';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import config from '../config/config';
+import { UserService } from './users.service';
+import { selectedDataUser } from '../utils/types/user.types';
+import { db } from '../utils/db/db.server';
 var userService = new UserService();
 var AuthService = /** @class */ (function () {
     function AuthService() {
     }
+    //Finds user by emails
     AuthService.prototype.getUser = function (email, password) {
         return __awaiter(this, void 0, void 0, function () {
             var user, isMatch;
@@ -58,11 +61,36 @@ var AuthService = /** @class */ (function () {
                         isMatch = _a.sent();
                         if (!isMatch)
                             throw boom.unauthorized();
+                        delete user.password;
                         return [2 /*return*/, user];
                 }
             });
         });
     };
+    //Creates a new user.
+    AuthService.prototype.createUser = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var name, lastName, email, password, role, hashPassword, createUser;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        name = data.name, lastName = data.lastName, email = data.email, password = data.password, role = data.role;
+                        return [4 /*yield*/, bcrypt.hash(password, 10)];
+                    case 1:
+                        hashPassword = _a.sent();
+                        data.password = hashPassword;
+                        return [4 /*yield*/, db.user.create({
+                                data: { name: name, lastName: lastName, email: email, password: hashPassword, role: role },
+                                select: selectedDataUser,
+                            })];
+                    case 2:
+                        createUser = _a.sent();
+                        return [2 /*return*/, createUser];
+                }
+            });
+        });
+    };
+    //Creates JWT that contains a payload with the user's id and role.
     AuthService.prototype.signToken = function (user) {
         var payload = {
             sub: user.id,

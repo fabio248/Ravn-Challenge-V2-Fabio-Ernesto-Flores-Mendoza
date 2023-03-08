@@ -6,11 +6,7 @@ import {
   listUsers,
   updateUser,
 } from '../controllers/user.controller';
-import {
-  createUserSchema,
-  getUserSchema,
-  updateUserSchema,
-} from '../schemas/user.schema';
+import { getUserSchema, updateUserSchema } from '../schemas/user.schema';
 
 const userRouter = Router();
 

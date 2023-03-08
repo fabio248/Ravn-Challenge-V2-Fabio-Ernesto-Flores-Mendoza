@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 var id = Joi.number().integer();
 var name = Joi.string().min(3);
 var lastName = Joi.string().min(3);

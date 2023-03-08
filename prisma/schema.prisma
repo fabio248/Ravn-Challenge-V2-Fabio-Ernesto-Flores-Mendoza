@@ -10,17 +10,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id Int @id @default(autoincrement())
   name String
   lastName String
   email String @unique
   password String
   role Role @default(CLIENT)
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+
+
+  @@map("user")
 }
 
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Decimal
+  isEnable Boolean @default(true) @map("is_enable")
+  category Category? @relation(fields: [categoryId], references: [id],onDelete: SetNull,onUpdate: Cascade)
+  categoryId Int? @map("category_id")
+  images Image[]
+  folderId String @map("folder_id")
+  urlFolder String @map("url_folder")
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+
+	@@map("product")
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+  name String
+  url String
+  product Product? @relation(fields: [productId],references: [id],onDelete: SetNull,onUpdate: Cascade)
+  productId Int? @map("product_id")
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+
+
+  @@map("product_image")
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  products Product[]
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+
+  @@map("category")
+}
 enum Role {
   CLIENT
   MANAGER

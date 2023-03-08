@@ -1,4 +1,4 @@
-import boom from "@hapi/boom";
+import boom from '@hapi/boom';
 export function validatorHandler(schema, property) {
     return function (req, res, next) {
         var data = req[property];

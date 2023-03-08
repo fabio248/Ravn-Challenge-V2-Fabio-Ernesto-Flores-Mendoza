@@ -12,7 +12,7 @@ export const login = async (
     const user = req.user;
     const { token } = authService.signToken(user);
     res.status(200).json({
-      status: '200',
+      statusCode: '200',
       message: 'sign in sucessfull',
       data: user,
       token,
@@ -32,6 +32,8 @@ export const registerUser = async (
     const user = await authService.createUser(data);
     res
       .status(201)
-      .json({ status: '201', message: 'user created', data: user });
-  } catch (error) {}
+      .json({ statusCode: '201', message: 'user created', data: user });
+  } catch (error) {
+    next(error);
+  }
 };

@@ -1,5 +1,5 @@
-import { Strategy, ExtractJwt } from "passport-jwt";
-import config from "../../../config/config";
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import config from '../../../config/config';
 // Define options for JWT strategy
 var option = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

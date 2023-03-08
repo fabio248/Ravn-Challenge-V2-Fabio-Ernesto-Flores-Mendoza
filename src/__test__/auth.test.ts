@@ -1,6 +1,5 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { createServer } from '../utils/server';
-import bcrypt from 'bcrypt';
 import request from 'supertest';
 import { server } from '..';
 import { db } from '../utils/db/db.server';

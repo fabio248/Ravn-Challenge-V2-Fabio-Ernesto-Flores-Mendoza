@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { UserService } from "../services/users.service";
+import { UserService } from '../services/users.service';
 var userService = new UserService();
 export var listUsers = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_1;
@@ -45,7 +45,7 @@ export var listUsers = function (req, res, next) { return __awaiter(void 0, void
                 return [4 /*yield*/, userService.findAll()];
             case 1:
                 users = _a.sent();
-                res.json({ statusCode: "200", message: "users founds", users: users });
+                res.json({ statusCode: '200', message: 'users found', data: users });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
@@ -65,7 +65,7 @@ export var getUser = function (req, res, next) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, userService.findOne(parseInt(id))];
             case 1:
                 user = _a.sent();
-                res.json({ statusCode: "200", message: "user found", user: user });
+                res.json({ statusCode: '200', message: 'user found', data: user });
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
@@ -75,29 +75,8 @@ export var getUser = function (req, res, next) { return __awaiter(void 0, void 0
         }
     });
 }); };
-export var createUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, user, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                data = req.body;
-                console.log(req.body);
-                return [4 /*yield*/, userService.create(data)];
-            case 1:
-                user = _a.sent();
-                res.status(201).json({ statusCode: "201", message: "user created", user: user });
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                next(error_3);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
 export var updateUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, changes, user, error_4;
+    var id, changes, user, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -107,18 +86,18 @@ export var updateUser = function (req, res, next) { return __awaiter(void 0, voi
                 return [4 /*yield*/, userService.update(parseInt(id), changes)];
             case 1:
                 user = _a.sent();
-                res.json({ statusCode: "200", message: "user updated", user: user });
+                res.json({ statusCode: '200', message: 'user updated', data: user });
                 return [3 /*break*/, 3];
             case 2:
-                error_4 = _a.sent();
-                next(error_4);
+                error_3 = _a.sent();
+                next(error_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 export var deleteUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, error_5;
+    var id, user, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -127,11 +106,11 @@ export var deleteUser = function (req, res, next) { return __awaiter(void 0, voi
                 return [4 /*yield*/, userService.delete(parseInt(id))];
             case 1:
                 user = _a.sent();
-                res.json({ statusCode: "200", message: "user deleted", user: user });
+                res.json({ statusCode: '200', message: 'user deleted', data: user });
                 return [3 /*break*/, 3];
             case 2:
-                error_5 = _a.sent();
-                next(error_5);
+                error_4 = _a.sent();
+                next(error_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

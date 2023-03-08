@@ -1,7 +1,10 @@
-import { Router } from "express";
-import passport from "passport";
-import { login } from "../controllers/auth.controller";
+import { Router } from 'express';
+import passport from 'passport';
+import { login, registerUser } from '../controllers/auth.controller';
+import { validatorHandler } from '../middlewares/validator.handler';
+import { createUserSchema } from '../schemas/user.schema';
 var authRouter = Router();
-authRouter.post("/login", passport.authenticate("local", { session: false }), login);
+authRouter.post('/signin', passport.authenticate('local', { session: false }), login);
+authRouter.post('/signup', validatorHandler(createUserSchema, 'body'), registerUser);
 export { authRouter };
 //# sourceMappingURL=auth.routes.js.map

@@ -10,7 +10,7 @@ export const listUsers = async (
 ) => {
   try {
     const users = await userService.findAll();
-    res.json({ status: '200', message: 'users founds', data: users });
+    res.json({ statusCode: '200', message: 'users found', data: users });
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,7 @@ export const getUser = async (
   try {
     const { id } = req.params;
     const user = await userService.findOne(parseInt(id));
-    res.json({ status: '200', message: 'user found', data: user });
+    res.json({ statusCode: '200', message: 'user found', data: user });
   } catch (error) {
     next(error);
   }
@@ -39,7 +39,7 @@ export const updateUser = async (
     const { id } = req.params;
     const changes = req.body;
     const user = await userService.update(parseInt(id), changes);
-    res.json({ status: '200', message: 'user updated', data: user });
+    res.json({ statusCode: '200', message: 'user updated', data: user });
   } catch (error) {
     next(error);
   }
@@ -53,7 +53,7 @@ export const deleteUser = async (
   try {
     const { id } = req.params;
     const user = await userService.delete(parseInt(id));
-    res.json({ status: '200', message: 'user deleted', data: user });
+    res.json({ statusCode: '200', message: 'user deleted', data: user });
   } catch (error) {
     next(error);
   }
