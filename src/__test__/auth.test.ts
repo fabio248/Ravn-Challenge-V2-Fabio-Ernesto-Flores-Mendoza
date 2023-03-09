@@ -1,12 +1,9 @@
 import { Role } from '@prisma/client';
-import { createServer } from '../utils/server';
 import request from 'supertest';
-import { server } from '..';
 import { db } from '../utils/db/db.server';
+import { app, server } from '../index';
 
-const app = createServer();
-
-const mockUser = {
+export const mockUser = {
   name: 'jose',
   lastName: 'gonzales',
   email: 'jose@gmail.com',

@@ -17,6 +17,7 @@ model User {
   email String @unique
   password String
   role Role @default(CLIENT)
+  cart Cart?
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
 
@@ -35,6 +36,8 @@ model Product {
   images Image[]
   folderId String @map("folder_id")
   urlFolder String @map("url_folder")
+  stock Int
+  carts    ProductInCart[]
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
 
@@ -63,6 +66,31 @@ model Category {
   updateAt DateTime @updatedAt @map("updated_at")
 
   @@map("category")
+}
+
+
+model Cart  {
+  id Int @id @default(autoincrement())
+  user        User  @relation(fields: [userId],references: [id])
+  userId      Int @map("user_id") @unique
+  total       Float
+  status      String   @default("pending")
+  products    ProductInCart[]
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+  @@map("cart")
+}
+model ProductInCart {
+  id         Int      @id @default(autoincrement())
+  cartId     Int
+  quantity   Int
+  price      Float
+  product    Product?  @relation(fields: [productId], references: [id],onDelete: SetNull,onUpdate: Cascade)
+  productId  Int?      @map("product_id")
+  cart       Cart     @relation(fields: [cartId], references: [id])
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @updatedAt @map("updated_at")
+  @@map("product_in_cart")
 }
 enum Role {
   CLIENT

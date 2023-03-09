@@ -11,6 +11,16 @@ services:
       - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+  postgres-test:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=tiny_store_test
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5433:5432 # Puerto diferente para evitar conflictos con el servicio principal
+    volumes:
+      - ./postgres_data_test:/var/lib/postgresql/data
   pgadmin:
     image: dpage/pgadmin4
     environment:

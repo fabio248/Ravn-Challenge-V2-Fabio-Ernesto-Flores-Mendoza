@@ -7,6 +7,7 @@ const config = {
   dbUrl: process.env.DATABASE_URL,
   secretJWT: process.env.SECRET_JWT,
   googleFolder: process.env.GOOGLE_API_FOLDER_ID,
+  enviroment: process.env.NODE_ENV || 'development',
 };
 
 export default config;

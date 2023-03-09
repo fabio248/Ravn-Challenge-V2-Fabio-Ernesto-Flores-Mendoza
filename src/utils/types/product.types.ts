@@ -4,6 +4,6 @@ export type dataProduct = {
   price?: number;
   isEnable?: boolean;
   categoryId?: number;
-  urlFolder: string;
-  folderId: string;
+  urlFolder?: string;
+  folderId?: string;
 };

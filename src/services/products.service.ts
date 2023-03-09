@@ -1,44 +1,31 @@
 import { db } from '../utils/db/db.server';
 import boom from '@hapi/boom';
 import { dataProduct } from '../utils/types/product.types';
-import { dataImage } from '../utils/types/images.types';
+import { Prisma } from '@prisma/client';
+
+interface FindAllOptions {
+  offset?: number;
+  limit?: number;
+  categoryId?: number;
+}
 
 class ProductService {
   constructor() {}
 
   //Finds all users.
-  async findAll(offset, limit, categoryId) {
-    let products;
-    let options = {};
-    let intCategoryId = parseInt(categoryId);
-    if (offset || limit) {
-      const startIndex = parseInt(offset) || 0;
-      const endIndex = parseInt(limit) || 10;
-      categoryId
-        ? (options = {
-            skip: startIndex,
-            take: endIndex,
-            where: { categoryId: intCategoryId },
-            include: { images: true },
-          })
-        : (options = {
-            skip: startIndex,
-            take: endIndex,
-            include: { images: true },
-          });
-      products = await db.product.findMany(options);
-    } else {
-      categoryId
-        ? (options = {
-            where: { categoryId: intCategoryId },
-            include: { images: true },
-          })
-        : (options = {
-            include: { images: true },
-          });
-      products = await db.product.findMany(options);
+  async findAll(options?: FindAllOptions) {
+    const query: Prisma.ProductFindManyArgs = {
+      where: options.categoryId
+        ? { categoryId: options.categoryId }
+        : undefined,
+      include: { images: true },
+      skip: options.offset,
+      take: options.limit,
+    };
+    const products = await db.product.findMany(query);
+    if (products.length === 0) {
+      throw boom.notFound('products not found');
     }
-    if (products.length <= 0) throw boom.notFound('products not found');
     return products;
   }
 
@@ -59,6 +46,7 @@ class ProductService {
       data: {
         ...dataProduct,
         categoryId: parseInt(dataProduct.categoryId),
+        stock: parseInt(dataProduct.stock),
         images: {
           create: imagesData,
         },

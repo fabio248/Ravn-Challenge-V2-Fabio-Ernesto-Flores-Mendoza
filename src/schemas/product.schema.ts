@@ -8,12 +8,14 @@ const isEnable = Joi.boolean();
 const categoryId = Joi.number();
 const folderId = Joi.string();
 const urlFolder = Joi.string();
+const stock = Joi.number();
 
 const createProductSchema = Joi.object({
   name: name.required(),
   description: description.required(),
   price: price.required(),
   categoryId: categoryId.required(),
+  stock: stock.required(),
   isEnable,
   folderId,
   urlFolder,

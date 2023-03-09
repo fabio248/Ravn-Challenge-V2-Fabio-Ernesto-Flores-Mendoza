@@ -13,7 +13,17 @@ export const listProducts = async (
 ) => {
   try {
     const { offset, limit, categoryId } = req.query;
-    const products = await productService.findAll(offset, limit, categoryId);
+    const numericOffset =
+      typeof offset === 'string' ? parseInt(offset, 10) : undefined;
+    const numericLimit =
+      typeof limit === 'string' ? parseInt(limit, 10) : undefined;
+    const numericCategoryId =
+      typeof categoryId === 'string' ? parseInt(categoryId, 10) : undefined;
+    const products = await productService.findAll({
+      offset: numericOffset,
+      limit: numericLimit,
+      categoryId: numericCategoryId,
+    });
 
     res.json({ status: '200', message: 'products found', data: products });
   } catch (error) {
