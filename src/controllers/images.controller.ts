@@ -27,8 +27,7 @@ export const uploadImageByProduct = async (
   next: NextFunction
 ) => {
   try {
-    const files = req.files;
-    console.log({ files });
+    const files: any = req.files;
     const { productId } = req.params;
     //Upload images google Drive
     const uploadedImages = await imageService.uploadByProduct(

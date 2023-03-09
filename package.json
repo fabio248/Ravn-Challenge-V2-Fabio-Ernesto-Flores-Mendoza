@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "test": "cross-env NODE_ENV=test set NODE_OPTIONS=--experimental-vm-modules && jest --watchAll --no-cache --detectOpenHandles",
     "start": "ts-node src/index.ts",
     "dev": "cross-env NODE_ENV=development nodemon -w *.ts -w .env src/index.ts",
     "build": "tsc",
-    "lint": "eslint . --ext .ts",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "migration:run": "prisma migrate dev --name"
+    "migration:run": "prisma migrate dev --name",
+    "seed": "cross-env NODE_ENV=development ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
