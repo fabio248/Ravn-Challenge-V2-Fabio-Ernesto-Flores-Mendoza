@@ -3,11 +3,11 @@ import { db } from '../utils/db/db.server';
 import { app, server } from '../index';
 
 describe('Product endpoint', () => {
-  let newProduct;
+  let newProduct, product, category;
   beforeAll(async () => {
     await db.$connect();
-    await db.category.create({
-      data: { name: 'category 1', description: 'Descripción de la categorya' },
+    category = await db.category.create({
+      data: { name: 'category 1', description: 'Description category' },
     });
 
     await db.product.createMany({
@@ -19,7 +19,7 @@ describe('Product endpoint', () => {
           stock: 5,
           folderId: 'folderejemplo',
           urlFolder: 'url.com',
-          categoryId: 1,
+          categoryId: category.id,
         },
         {
           name: 'Product 2',
@@ -28,7 +28,7 @@ describe('Product endpoint', () => {
           stock: 15,
           folderId: 'folderejemplo',
           urlFolder: 'url.com',
-          categoryId: 1,
+          categoryId: category.id,
         },
         {
           name: 'Product 3',
@@ -37,7 +37,7 @@ describe('Product endpoint', () => {
           stock: 10,
           folderId: 'folderejemplo',
           urlFolder: 'url.com',
-          categoryId: 1,
+          categoryId: category.id,
         },
       ],
     });
@@ -49,7 +49,7 @@ describe('Product endpoint', () => {
         stock: 5,
         folderId: 'folderejemplo',
         urlFolder: 'url.com',
-        categoryId: 1,
+        categoryId: category.id,
       },
     });
   });
@@ -57,16 +57,19 @@ describe('Product endpoint', () => {
   afterAll(async () => {
     await db.$disconnect();
     await db.$executeRaw`TRUNCATE TABLE "product" CASCADE`;
+    await db.$executeRaw`TRUNCATE TABLE "category" CASCADE`;
     server.close();
   });
   //Define the data required for the test
-  const product = {
-    name: 'Producto de prueba',
-    description: 'Este es un producto creado para pruebas',
-    price: 9.99,
-    categoryId: 1,
-    stock: 15,
-  };
+  beforeEach(() => {
+    product = {
+      name: 'Producto de prueba',
+      description: 'Este es un producto creado para pruebas',
+      price: 9.99,
+      categoryId: category.id,
+      stock: 15,
+    };
+  });
   const tokenManager =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcwLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTY3ODEzNTE0Mn0.Cs-0SDeSjojdHXe0n9QLQPDKnZuQXO95NEQCRMMZtYc';
   const tokenClient =
@@ -96,9 +99,11 @@ describe('Product endpoint', () => {
       expect(response.body.data[1].name).toBe('Product 3');
     });
     it('should return products by category', async () => {
+      //Create new category
       const category = await db.category.create({
         data: { name: 'Category', description: 'description category' },
       });
+      //update product category id
       await db.product.update({
         where: { id: newProduct.id },
         data: { categoryId: category.id },
