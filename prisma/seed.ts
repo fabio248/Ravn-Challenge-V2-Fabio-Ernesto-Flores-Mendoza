@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client';
 import { db } from '../src/utils/db/db.server';
+import bcrypt from 'bcrypt';
 
 async function main() {
   //Categories
@@ -18,24 +19,25 @@ async function main() {
     ],
   });
   //Users
+  //Hashing password
+  let hashPassword = await bcrypt.hash('123456789', 10);
   const user = await db.user.createMany({
     data: [
       {
         name: 'Fabio',
         lastName: 'Flores',
-        email: 'dawdawddawd@gmail.com',
-        password: 'password',
+        email: 'fabioflores@gmail.com',
+        password: hashPassword, //123456789
       },
       {
         name: 'Kevin',
         lastName: 'Velazques',
-        email: 'keviwaddawdaw@gmail.com',
-        password: 'password',
+        email: 'kevinvelazques@gmail.com',
+        password: hashPassword, //123456789
         role: Role.MANAGER,
       },
     ],
   });
-  console.log({ user });
 }
 main()
   .then(async () => {

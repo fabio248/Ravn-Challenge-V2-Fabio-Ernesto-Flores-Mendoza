@@ -18,6 +18,7 @@ model User {
   password String
   role Role @default(CLIENT)
   cart Cart?
+  likes UserLikeProduct[]
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
 
@@ -38,6 +39,7 @@ model Product {
   urlFolder String @map("url_folder")
   stock Int
   carts    ProductInCart[]
+  likes    UserLikeProduct[]
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
 
@@ -91,6 +93,16 @@ model ProductInCart {
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
   @@map("product_in_cart")
+}
+
+
+model UserLikeProduct {
+  id         Int      @id @default(autoincrement())
+  product    Product?  @relation(fields: [productId], references: [id],onDelete: SetNull,onUpdate: Cascade)
+  productId  Int?      @map("product_id")
+  user       User?    @relation(fields: [userId], references: [id],onDelete: SetNull,onUpdate: Cascade)
+  userId     Int?     @map("user_id")
+  @@map("user_like_product")
 }
 enum Role {
   CLIENT

@@ -1,6 +1,9 @@
 import request from 'supertest';
 import { db } from '../utils/db/db.server';
 import { app, server } from '../index';
+import jwt from 'jsonwebtoken';
+import { Role } from '@prisma/client';
+import config from '../config/config';
 
 describe('Product endpoint', () => {
   let newProduct, product, category;
@@ -70,10 +73,12 @@ describe('Product endpoint', () => {
       stock: 15,
     };
   });
-  const tokenManager =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcwLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTY3ODEzNTE0Mn0.Cs-0SDeSjojdHXe0n9QLQPDKnZuQXO95NEQCRMMZtYc';
-  const tokenClient =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJDTElFTlQiLCJpYXQiOjE2NzgzMjg3ODR9.2ojPznCDhGlnO7UdtX14SEeTd4-UyIF4a2db8K7LLt0';
+  //Create tokens
+  const tokenManager = jwt.sign(
+    { sub: 1, role: Role.MANAGER },
+    config.secretJWT
+  );
+  const tokenClient = jwt.sign({ sub: 1, role: Role.CLIENT }, config.secretJWT);
   const file = {
     fieldname: 'image',
     originalname: 'test.jpg',
@@ -120,7 +125,7 @@ describe('Product endpoint', () => {
     it('should create a new product, folder in google drive and upload image', async () => {
       const response = await request(app)
         .post('/api/products')
-        .set('Authorization', tokenManager)
+        .set('Authorization', `Bearer ${tokenManager}`)
         .field('name', product.name)
         .field('description', product.description)
         .field('price', product.price)
@@ -140,7 +145,7 @@ describe('Product endpoint', () => {
     it('should return status 400 if no image is attached', async () => {
       const response = await request(app)
         .post('/api/products')
-        .set('Authorization', tokenManager)
+        .set('Authorization', `Bearer ${tokenManager}`)
         .field('name', product.name)
         .field('description', product.description)
         .field('price', product.price)
@@ -165,7 +170,7 @@ describe('Product endpoint', () => {
     it('should return status 401 if incorrect token is set (role CLIENT)', async () => {
       const response = await request(app)
         .post('/api/products')
-        .set('Authorization', tokenClient)
+        .set('Authorization', `Bearer ${tokenClient}`)
         .field('name', product.name)
         .field('description', product.description)
         .field('price', product.price)
@@ -184,7 +189,7 @@ describe('Product endpoint', () => {
       };
       const response = await request(app)
         .put(`/api/products/${newProduct.id}`)
-        .set('Authorization', tokenManager)
+        .set('Authorization', `Bearer ${tokenManager}`)
         .send(updatedProduct)
         .expect(200);
       expect(response.body.message).toEqual('product updated');
@@ -200,7 +205,7 @@ describe('Product endpoint', () => {
       };
       const response = await request(app)
         .put(`/api/products/${newProduct.id}`)
-        .set('Authorization', tokenClient)
+        .set('Authorization', `Bearer ${tokenClient}`)
         .send(updatedProduct)
         .expect(401);
       expect(response.body.message).toEqual('Unauthorized');
@@ -211,7 +216,7 @@ describe('Product endpoint', () => {
     it('should delete a product', async () => {
       const response = await request(app)
         .delete(`/api/products/${newProduct.id}`)
-        .set('Authorization', tokenManager)
+        .set('Authorization', `Bearer ${tokenManager}`)
         .expect(200);
       expect(response.body.message).toEqual('product deleted');
       expect(response.body.data.id).toEqual(newProduct.id);
@@ -219,7 +224,7 @@ describe('Product endpoint', () => {
     it('should return 401 if incorrect token is set (role CLIENT)', async () => {
       const response = await request(app)
         .delete(`/api/products/${newProduct.id}`)
-        .set('Authorization', tokenClient)
+        .set('Authorization', `Bearer ${tokenClient}`)
         .expect(401);
       expect(response.body.message).toEqual('Unauthorized');
     });

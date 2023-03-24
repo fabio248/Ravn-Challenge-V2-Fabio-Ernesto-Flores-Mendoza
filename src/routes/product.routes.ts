@@ -3,6 +3,7 @@ import { validatorHandler } from '../middlewares/validator.handler';
 import {
   createProduct,
   deleteProduct,
+  getProduct,
   listProducts,
   updateProduct,
 } from '../controllers/product.controller';
@@ -23,6 +24,11 @@ import passport from 'passport';
 const productRouter = Router();
 
 productRouter.get('/', listProducts);
+productRouter.get(
+  '/:id',
+  validatorHandler(getProductSchema, 'params'),
+  getProduct
+);
 productRouter.post(
   '/',
   fileUpload({ createParentPath: true }), // Middleware for handling file upload
